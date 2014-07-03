@@ -1001,7 +1001,8 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
     if (GTK_WIDGET_CLASS (dtw_parent_class)->event) {
         return (* GTK_WIDGET_CLASS (dtw_parent_class)->event) (widget, event);
     } else {
-        if (event->type == GDK_KEY_PRESS && dtw->desktop->getSelection()->isEmpty()) {
+        if (event->type == GDK_KEY_PRESS && dtw->desktop->getSelection()->isEmpty()
+                && dtw->desktop->canvas->current_item) {
             int dx = 0, dy = 0;
             switch (event->key.keyval) {
             case GDK_KEY_Left:
