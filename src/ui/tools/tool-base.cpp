@@ -956,12 +956,10 @@ void sp_event_context_read(ToolBase *ec, gchar const *key) {
 gint sp_event_context_root_handler(ToolBase * event_context,
         GdkEvent * event)
 {
-    std::cout << "sp_event_context_root_handler" << std::endl;
     if (!event_context->_uses_snap) {
         return sp_event_context_virtual_root_handler(event_context, event);
     }
 
-    SPCanvas * canvas = event_context->getDesktop().getCanvas();
     switch (event->type) {
     case GDK_MOTION_NOTIFY:
         sp_event_context_snap_delay_handler(event_context, NULL, NULL,
@@ -982,29 +980,6 @@ gint sp_event_context_root_handler(ToolBase * event_context,
         // drawing a new shape we really should snap though.
         event_context->desktop->namedview->snap_manager.snapprefs.setSnapPostponedGlobally(
                 false);
-        break;
-    case GDK_KEY_PRESS:
-        if (canvas->current_item == NULL) break;
-        switch (event->key.keyval) {
-        case GDK_KEY_Left:
-            canvas->scrollTo(canvas->x0 + 5, canvas->y0, FALSE);
-            canvas->updateNow();
-            break;
-        case GDK_KEY_Right:
-            canvas->scrollTo(canvas->x0 - 5, canvas->y0, FALSE);
-            canvas->updateNow();
-            break;
-        case GDK_KEY_Up:
-            canvas->scrollTo(canvas->x0, canvas->y0 + 5, FALSE);
-            canvas->updateNow();
-            break;
-        case GDK_KEY_Down:
-            canvas->scrollTo(canvas->x0, canvas->y0 - 5, FALSE);
-            canvas->updateNow();
-            break;
-        default:
-            break;
-        }
         break;
     default:
         break;
