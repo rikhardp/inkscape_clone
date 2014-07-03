@@ -1005,16 +1005,16 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
             int dx = 0, dy = 0;
             switch (event->key.keyval) {
             case GDK_KEY_Left:
-                dx = 5;
-                break;
-            case GDK_KEY_Right:
                 dx = -5;
                 break;
+            case GDK_KEY_Right:
+                dx = 5;
+                break;
             case GDK_KEY_Up:
-                dy = 5;
+                dy = -5;
                 break;
             case GDK_KEY_Down:
-                dy = -5;
+                dy = 5;
                 break;
             default:
                 break;

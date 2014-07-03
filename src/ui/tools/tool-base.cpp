@@ -59,7 +59,6 @@
 #include "color.h"
 #include "knot.h"
 
-#include <iostream>
 
 // globals for temporary switching to selector by space
 static bool selector_toggled = FALSE;
