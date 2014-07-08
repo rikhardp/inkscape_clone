@@ -118,8 +118,6 @@ ink_common_sources +=	\
 	extension/internal/cairo-png-out.cpp \
 	extension/internal/javafx-out.cpp	\
 	extension/internal/javafx-out.h	\
-	extension/internal/bmp-out.cpp \ 
-	extension/internal/bmp-out.h \
 	extension/internal/gdkpixbuf-input.h	\
 	extension/internal/gdkpixbuf-input.cpp	\
 	extension/internal/latex-text-renderer.h \
