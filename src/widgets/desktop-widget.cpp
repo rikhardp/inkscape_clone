@@ -1006,14 +1006,14 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
                 && dtw->desktop->canvas->current_item) {
             int dx = 0, dy = 0;
             switch (event->key.keyval) {
-            case GDK_KEY_Left:
+			case GDK_KEY_Left:
                 dx = -5;
                 break;
             case GDK_KEY_Right:
                 dx = 5;
                 break;
             case GDK_KEY_Up:
-				dy = -5;
+			    dy = -5;
                 break;
             case GDK_KEY_Down:
                 dy = 5;
@@ -1023,19 +1023,19 @@ sp_desktop_widget_event (GtkWidget *widget, GdkEvent *event, SPDesktopWidget *dt
             }
 			
             gtk_adjustment_set_value (dtw->vadj, gtk_adjustment_get_value (dtw->vadj) + dy);
-			if (gtk_adjustment_get_value (dtw->vadj) <= -800) {
-				gtk_adjustment_set_lower (dtw->vadj, gtk_adjustment_get_lower(dtw->vadj) + dy);
-			}
-			if (gtk_adjustment_get_value (dtw->vadj) + gtk_adjustment_get_page_size(dtw->vadj) >= 430) {
-				gtk_adjustment_set_upper (dtw->vadj, gtk_adjustment_get_upper(dtw->vadj) + dy);
+            if (gtk_adjustment_get_value (dtw->vadj) <= -800) {
+                gtk_adjustment_set_lower (dtw->vadj, gtk_adjustment_get_lower(dtw->vadj) + dy);
             }
-			gtk_adjustment_set_value (dtw->hadj, gtk_adjustment_get_value (dtw->hadj) + dx);
-			if (gtk_adjustment_get_value (dtw->hadj) <= -484){
-				gtk_adjustment_set_lower (dtw->hadj, gtk_adjustment_get_lower(dtw->hadj) + dx);
-			}
-			if (gtk_adjustment_get_value (dtw->hadj) + gtk_adjustment_get_page_size(dtw->hadj) >= 745){
-				gtk_adjustment_set_upper (dtw->hadj, gtk_adjustment_get_upper(dtw->hadj) + dx);
-			}
+            if (gtk_adjustment_get_value (dtw->vadj) + gtk_adjustment_get_page_size(dtw->vadj) >= 430) {
+                gtk_adjustment_set_upper (dtw->vadj, gtk_adjustment_get_upper(dtw->vadj) + dy);
+            }
+            gtk_adjustment_set_value (dtw->hadj, gtk_adjustment_get_value (dtw->hadj) + dx);
+            if (gtk_adjustment_get_value (dtw->hadj) <= -484){
+                gtk_adjustment_set_lower (dtw->hadj, gtk_adjustment_get_lower(dtw->hadj) + dx);
+            }
+            if (gtk_adjustment_get_value (dtw->hadj) + gtk_adjustment_get_page_size(dtw->hadj) >= 745){
+                gtk_adjustment_set_upper (dtw->hadj, gtk_adjustment_get_upper(dtw->hadj) + dx);
+            }
         } else {
             // The key press/release events need to be passed to desktop handler explicitly,
             // because otherwise the event contexts only receive key events when the mouse cursor
