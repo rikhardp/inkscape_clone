@@ -45,6 +45,7 @@
 #include "internal/odf.h"
 #include "internal/latex-pstricks-out.h"
 #include "internal/latex-pstricks.h"
+#include "internal/bmp-out.h"
 #include "internal/gdkpixbuf-input.h"
 #include "internal/bluredge.h"
 #include "internal/gimpgrad.h"
@@ -180,6 +181,7 @@ init()
     Internal::OdfOutput::init();
     Internal::PrintLatex::init();
     Internal::LatexOutput::init();
+    Internal::BmpOutput::init();
 #ifdef WITH_LIBWPG
     Internal::WpgInput::init();
 #endif
