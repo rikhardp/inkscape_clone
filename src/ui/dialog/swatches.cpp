@@ -17,6 +17,7 @@
 #include <map>
 #include <algorithm>
 #include <set>
+#include <iostream>
 
 #include "swatches.h"
 #include <gtkmm/radiomenuitem.h>
@@ -245,6 +246,7 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
 
 gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, gpointer user_data )
 {
+    std::cout << "color select" << std::endl;
     gboolean handled = FALSE;
 
     if ( event && (event->button == 3) && (event->type == GDK_BUTTON_PRESS) ) {
@@ -360,6 +362,15 @@ gboolean colorItemHandleButtonPress( GtkWidget* widget, GdkEventButton* event, g
     return handled;
 }
 
+gboolean colorItemHandleKeyPress( GtkWidget* /*widget*/, GdkEventKey* event, gpointer user_data);
+
+gboolean colorItemHandleKeyPress( GtkWidget* widget, GdkEventKey* event, gpointer user_data )
+{
+    std::cout << "colorItemHandleKeyPress" << std::endl;
+    SwatchesPanel* swp = findContainingPanel( widget );
+    swp->moveSelectedColorItem(SwatchesPanel::DIR_LEFT);
+    return true;
+}
 
 static char* trim( char* str ) {
     char* ret = str;
@@ -1076,6 +1087,29 @@ void SwatchesPanel::handleDefsModified(SPDocument *document)
     }
 }
 
+ColorItem * SwatchesPanel::moveColorItem(ColorItem *item, int direction) 
+{
+    SwatchPage* swp = _pages[_currentIndex];
+    boost::ptr_vector<ColorItem>::iterator it = swp->_colors.begin();//std::find(swp->_colors.begin(), swp->_colors.end(), item);
+    if (it == _colors.end()) {
+        return NULL;
+    }
+    
+    //switch (direction) {
+    //case DIR_LEFT:
+        if (it != _colors.begin()) {
+           // g_signal_emit (G_OBJECT (it->_previews), 
+        }
+    /*    break;
+    case DIR_RIGHT:
+        if (idx < _getSwatchSets().size() - 1) {
+            _setSelectedIndex(idx + 1);
+        }
+        break;
+    default:
+        break;
+    }*/
+}
 
 std::vector<SwatchPage*> SwatchesPanel::_getSwatchSets() const
 {
