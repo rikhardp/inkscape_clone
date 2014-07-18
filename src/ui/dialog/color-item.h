@@ -43,7 +43,6 @@ public:
 class ColorItem : public Inkscape::UI::Previewable
 {
     friend void _loadPaletteFile( gchar const *filename );
-    friend ColorItem * SwatchesPanel::moveColorItem(ColorItem *item, int direction); 
 public:
     ColorItem( ege::PaintDef::ColorType type );
     ColorItem( unsigned int r, unsigned int g, unsigned int b,
