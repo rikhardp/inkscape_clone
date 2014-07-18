@@ -710,7 +710,7 @@ bool SelectTool::root_handler(GdkEvent* event) {
 
                         if (r->getMode() == RUBBERBAND_MODE_RECT) {
                             Geom::OptRect const b = r->getRectangle();
-                            items = sp_desktop_document(desktop)->getItemsInBox(desktop->dkey, *b);
+                            items = sp_desktop_document(desktop)->getItemsPartiallyInBox(desktop->dkey, *b);
                         } else if (r->getMode() == RUBBERBAND_MODE_TOUCHPATH) {
                             items = sp_desktop_document(desktop)->getItemsAtPoints(desktop->dkey, r->getPoints());
                         }
