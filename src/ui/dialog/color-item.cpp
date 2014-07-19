@@ -200,6 +200,8 @@ static bool popVal( guint64& numVal, std::string& str )
 // TODO resolve this more cleanly:
 extern gboolean colorItemHandleButtonPress( GtkWidget* /*widget*/, GdkEventButton* event, gpointer user_data);
 
+extern gboolean colorItemHandleKeyPress( GtkWidget* /*widget*/, GdkEventKey* event, gpointer user_data);
+
 static void colorItemDragBegin( GtkWidget */*widget*/, GdkDragContext* dc, gpointer data )
 {
     ColorItem* item = reinterpret_cast<ColorItem*>(data);
@@ -586,7 +588,7 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewS
                                  border );
 
         def.addCallback( _colorDefChanged, this );
-        eek_preview_set_focus_on_click(preview, FALSE);
+        eek_preview_set_focus_on_click(preview, TRUE);
         newBlot->set_tooltip_text(def.descr);
 
         g_signal_connect( G_OBJECT(newBlot->gobj()),
@@ -602,6 +604,11 @@ Gtk::Widget* ColorItem::getPreview(PreviewStyle style, ViewType view, ::PreviewS
         g_signal_connect( G_OBJECT(newBlot->gobj()),
                           "button-press-event",
                           G_CALLBACK(colorItemHandleButtonPress),
+                          this);
+
+        g_signal_connect( G_OBJECT(newBlot->gobj()),
+                          "key-press-event",
+                          G_CALLBACK(colorItemHandleKeyPress),
                           this);
 
         {

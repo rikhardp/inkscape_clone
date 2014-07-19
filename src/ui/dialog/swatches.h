@@ -30,6 +30,12 @@ class DocTrack;
 class SwatchesPanel : public Inkscape::UI::Widget::Panel
 {
 public:
+    enum 
+    {
+        DIR_LEFT,
+        DIR_RIGHT
+    };
+
     SwatchesPanel(gchar const* prefsPath = "/dialogs/swatches");
     virtual ~SwatchesPanel();
 
@@ -41,6 +47,8 @@ public:
     virtual SPDesktop* getDesktop() {return _currentDesktop;}
 
     virtual int getSelectedIndex() {return _currentIndex;} // temporary
+
+    ColorItem * moveColorItem(ColorItem *item, int direction);
 
 protected:
     static void handleDocumentDestroy(SPDocument *document);
