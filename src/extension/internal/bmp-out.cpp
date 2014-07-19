@@ -55,21 +55,37 @@ bool BmpOutput::check(Inkscape::Extension::Extension * /*module*/)
 */
 void BmpOutput::save(Inkscape::Extension::Output * mod, SPDocument *doc, gchar const *filename)
 {
+#ifdef WIN32
 	char tmpfile[L_tmpnam];
 	tmpnam(tmpfile);
-	CairoRendererOutput png_out;
-	png_out.save(mod, doc, tmpfile);
+#else
+	char *tmpfile = new char[12];
+ 	strcpy(tmpfile, "pngXXXXXX");
+ 	mkstemp(tmpfile);	
+#endif
+ 	char const *tmpwork = tmpfile;
+ #ifdef WIN32
+ 	++tmpwork;
+ #endif
+ 	CairoRendererOutput png_out;
+	png_out.save(mod, doc, tmpwork);
 	try {
 		Magick::Image img;
 		img.magick("png");
-		img.read(tmpfile);
+		img.read(tmpwork);
 		img.magick("bmp");
 		img.write(filename);
 	} catch (Magick::Exception &e) {
-		remove(tmpfile);
+		remove(tmpwork);
+#ifndef WIN32
+		delete[] tmpfile;
+#endif
 		throw Inkscape::Extension::Output::save_failed();		
 	}
-	remove(tmpfile);
+	remove(tmpwork);
+#ifndef WIN32
+		delete[] tmpfile;
+#endif	
 }
 
 /**
