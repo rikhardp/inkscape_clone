@@ -55,9 +55,8 @@ bool BmpOutput::check(Inkscape::Extension::Extension * /*module*/)
 */
 void BmpOutput::save(Inkscape::Extension::Output * mod, SPDocument *doc, gchar const *filename)
 {
-	char *tmpfile = new char[12];
-	strcpy(tmpfile, "pngXXXXXX");
-	mkstemp(tmpfile);
+	char tmpfile[L_tmpnam];
+	tmpnam(tmpfile);
 	CairoRendererOutput png_out;
 	png_out.save(mod, doc, tmpfile);
 	try {
@@ -68,11 +67,9 @@ void BmpOutput::save(Inkscape::Extension::Output * mod, SPDocument *doc, gchar c
 		img.write(filename);
 	} catch (Magick::Exception &e) {
 		remove(tmpfile);
-		delete[] tmpfile;
 		throw Inkscape::Extension::Output::save_failed();		
 	}
 	remove(tmpfile);
-	delete[] tmpfile;
 }
 
 /**
