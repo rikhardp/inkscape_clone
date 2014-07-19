@@ -14,29 +14,14 @@
 # include <config.h>
 #endif
 
-#include <cerrno>
-#include <cstdio>
+#include <glib/gstdio.h>
+
 #include "bmp-out.h"
-#include "cairo-png-out.h"
-#include <print.h>
+#include "cairo-png-out.h"	
 #include "extension/system.h"
-#include "extension/print.h"
-#include "extension/db.h"
 #include "extension/output.h"
-#include "display/drawing.h"
-
-#include "display/curve.h"
-#include "display/canvas-bpath.h"
-#include "sp-item.h"
-#include "style.h"
-#include "sp-root.h"
-#include "sp-shape.h"
-
-#include "io/sys.h"
-#include "document.h"
 
 #include <Magick++.h>
-#include <iostream>
 
 namespace Inkscape {
 namespace Extension {
@@ -55,10 +40,8 @@ bool BmpOutput::check(Inkscape::Extension::Extension * /*module*/)
 */
 void BmpOutput::save(Inkscape::Extension::Output * mod, SPDocument *doc, gchar const *filename)
 {
-	char *tmpfile = new char[12];
-	strcpy(tmpfile, "pngXXXXXX");
-	mkstemp(tmpfile);
-	CairoRendererOutput png_out;
+	gchar *tmpfile = g_build_filename( g_get_tmp_dir(), "inkscape-bmp-export-mediator", NULL );
+ 	CairoRendererOutput png_out;
 	png_out.save(mod, doc, tmpfile);
 	try {
 		Magick::Image img;
@@ -67,12 +50,12 @@ void BmpOutput::save(Inkscape::Extension::Output * mod, SPDocument *doc, gchar c
 		img.magick("bmp");
 		img.write(filename);
 	} catch (Magick::Exception &e) {
-		remove(tmpfile);
-		delete[] tmpfile;
+	    g_unlink(tmpfile); // delete the temporary file
+	    g_free(tmpfile);		
 		throw Inkscape::Extension::Output::save_failed();		
 	}
-	remove(tmpfile);
-	delete[] tmpfile;
+    g_unlink(tmpfile); // delete the temporary file
+    g_free(tmpfile);	
 }
 
 /**
