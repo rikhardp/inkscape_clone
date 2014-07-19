@@ -82,4 +82,6 @@ bool is_part_of_text_subtree (SPObject *obj);
 bool is_top_level_text_object (SPObject *obj);
 bool has_visible_text (SPObject *obj);
 
+bool is_line_break_object(SPObject const *obj);
+
 #endif // SEEN_SP_TEXT_EDITING_H

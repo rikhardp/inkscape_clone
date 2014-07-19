@@ -29,6 +29,8 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
+#include "text-editing.h"
+#include "sp-textpath.h"
 #include "inkscape-private.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -2213,22 +2215,33 @@ void ContextMenu::SpellcheckSettings (void)
     _desktop->_dlg_mgr->showDialog("SpellCheck");
 }
 
-#include <iostream>
+static void get_string(SPObject const *root, Glib::ustring *string, bool *got_line_break)
+{
+    if (*got_line_break) {
+        *string += '\n';
+    }
+    for (SPObject const *child = root->firstChild() ; child ; child = child->getNext()) {
+        if (SP_IS_STRING(child)) {
+            *string += SP_STRING(child)->string;
+        } else {
+            get_string(child, string, got_line_break);
+        }
+    }
+    if (!SP_IS_TEXT(root) && !SP_IS_TEXTPATH(root) && is_line_break_object(root)) {
+        *got_line_break = true;
+    }
+}
+
 void ContextMenu::CopyAsText (void)
 {
     if (_desktop->selection->isEmpty()) {
         _desktop->selection->set(_item);
     }
-    Gtk::Clipboard::get()->set_text(
-        sp_repr_lookup_name(_object->getRepr(), "string")->content()
-    );
-    /*for (SPObject *child = _object->firstChild() ; child ; child = child->getNext() ) {
-        for (SPObject *child2 = child->firstChild() ; child2 ; child2 = child2->getNext() ) {
-            if (SP_IS_STRING(child)) {
-                std::cout << SP_STRING(child)->string << std::endl;
-            }
-        }
-    }*/
+    
+    Glib::ustring string = "";
+    bool got_line_break = false;
+    get_string(_object, &string, &got_line_break);
+    Gtk::Clipboard::get()->set_text(string);
 }
 
 /*
