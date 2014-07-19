@@ -264,6 +264,11 @@ class ContextMenu : public Gtk::Menu
          * callback, is executed on clicking the "Check spelling" menu entry
          */
         void SpellcheckSettings(void);
+
+        /**
+         * callback, is executed on clicking the "Copy as text" menu entry
+         */
+        void CopyAsText(void);
 };
 
 #endif // SEEN_SP_INTERFACE_H

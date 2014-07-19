@@ -2187,6 +2187,12 @@ void ContextMenu::MakeTextMenu (void)
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
+
+    /* Copy as text option */
+    mi = Gtk::manage(new Gtk::MenuItem(_("Copy _as tex_t"), 1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CopyAsText));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
 }
 
 void ContextMenu::TextSettings (void)
@@ -2205,6 +2211,24 @@ void ContextMenu::SpellcheckSettings (void)
     }
 
     _desktop->_dlg_mgr->showDialog("SpellCheck");
+}
+
+#include <iostream>
+void ContextMenu::CopyAsText (void)
+{
+    if (_desktop->selection->isEmpty()) {
+        _desktop->selection->set(_item);
+    }
+    Gtk::Clipboard::get()->set_text(
+        sp_repr_lookup_name(_object->getRepr(), "string")->content()
+    );
+    /*for (SPObject *child = _object->firstChild() ; child ; child = child->getNext() ) {
+        for (SPObject *child2 = child->firstChild() ; child2 ; child2 = child2->getNext() ) {
+            if (SP_IS_STRING(child)) {
+                std::cout << SP_STRING(child)->string << std::endl;
+            }
+        }
+    }*/
 }
 
 /*
