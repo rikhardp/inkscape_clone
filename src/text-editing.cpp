@@ -185,7 +185,7 @@ Inkscape::Text::Layout::iterator sp_te_replace(SPItem *item, Inkscape::Text::Lay
 /* ***************************************************************************************************/
 //                             I N S E R T I N G   T E X T
 
-static bool is_line_break_object(SPObject const *object)
+bool is_line_break_object(SPObject const *object)
 {
     bool is_line_break = false;
     

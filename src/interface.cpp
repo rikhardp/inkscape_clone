@@ -29,6 +29,8 @@
 #include <gtkmm/imagemenuitem.h>
 #include <gtkmm/separatormenuitem.h>
 
+#include "text-editing.h"
+#include "sp-textpath.h"
 #include "inkscape-private.h"
 #include "extension/db.h"
 #include "extension/effect.h"
@@ -2187,6 +2189,12 @@ void ContextMenu::MakeTextMenu (void)
     mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::SpellcheckSettings));
     mi->show();
     insert(*mi,positionOfLastDialog++);
+
+    /* Copy as text option */
+    mi = Gtk::manage(new Gtk::MenuItem(_("Copy _as tex_t"), 1));
+    mi->signal_activate().connect(sigc::mem_fun(*this, &ContextMenu::CopyAsText));
+    mi->show();
+    insert(*mi,positionOfLastDialog++);
 }
 
 void ContextMenu::TextSettings (void)
@@ -2205,6 +2213,35 @@ void ContextMenu::SpellcheckSettings (void)
     }
 
     _desktop->_dlg_mgr->showDialog("SpellCheck");
+}
+
+static void get_string(SPObject const *root, Glib::ustring *string, bool *got_line_break)
+{
+    if (*got_line_break) {
+        *string += '\n';
+    }
+    for (SPObject const *child = root->firstChild() ; child ; child = child->getNext()) {
+        if (SP_IS_STRING(child)) {
+            *string += SP_STRING(child)->string;
+        } else {
+            get_string(child, string, got_line_break);
+        }
+    }
+    if (!SP_IS_TEXT(root) && !SP_IS_TEXTPATH(root) && is_line_break_object(root)) {
+        *got_line_break = true;
+    }
+}
+
+void ContextMenu::CopyAsText (void)
+{
+    if (_desktop->selection->isEmpty()) {
+        _desktop->selection->set(_item);
+    }
+    
+    Glib::ustring string = "";
+    bool got_line_break = false;
+    get_string(_object, &string, &got_line_break);
+    Gtk::Clipboard::get()->set_text(string);
 }
 
 /*
